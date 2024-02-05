@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangaroo Game</title>
+    <style>
+		html {
+			zoom: 100%;
+		}
+		
+        @font-face {
+            font-family: pixel;
+            src: url(pixel.ttf);
+        }
+
+        body {
+            font-family: pixel;
+            background-image: url('background.png');
+            object-fit: contain;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+			overflow: hidden;
+        }
+
+        .title {
+            float: left;
+            width: 750px;
+            height: 375px;
+            margin-top: 75px;
+            margin-left: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+			animation: slideInTop 2s ease-out;
+        }
+
+        .title::before {
+            content: url('title.png');
+        }
+		
+		div.titlePanel {
+			width: 100px;
+			height: 100px;
+			background-image: url('title.png');
+			margin: 0;
+			padding: 0;
+		}
+
+        button {
+            font-family: pixel;
+            color: bisque;
+            text-shadow: 5px 5px black;
+            font-size: 25px;
+            width: 350px;
+            height: 65px;
+            margin: 10px;
+            background-color: brown;
+            border-color: brown;
+            border-width: 8px;
+        }
+
+        .popup {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            border-color: brown;
+            border-width: 8px;
+            overflow: hidden;
+        }
+
+        .popup-content {
+            background-image: linear-gradient(to bottom right, bisque, burlywood);
+            font-size: 20px;
+            margin: 5% auto;
+            padding: 25px;
+            border: 1px solid #888888;
+            width: 30%;
+            border-color: brown;
+            border-width: 8px;
+        }
+
+        .popup-content button {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            margin: 30px;
+        }
+
+        .box {
+            float: left;
+            width: 400px;
+            height: 800px;
+            margin-top: 25px;
+            margin-left: 50px;
+            border-color: brown;
+            border-style: solid;
+            border-width: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(to bottom right, bisque, burlywood);
+			animation: slideInLeft 2s ease-out;
+        }
+		
+		.overlay {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		@keyframes slideInTop {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+		
+		footer {
+			position: fixed;
+			font-weight: bolder;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background-color: bisque; /* Set the background color for the footer */
+			text-align: center;
+			padding: 10px;
+			font-family: pixel;
+			font-size: 16px;
+		}
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="overlay">
+            <a href="index.html">
+                <button><b>Play</b></button>
+            </a>
+
+            <button id="myButton"><b>How to Play</b></button>
+			
+            <div id="myPopup" class="popup">
+                <div class="popup-content">
+                    <h1>HOW TO PLAY</h1>
+                    <p><b>CATEGORIES:</b></p>
+                    <p>There are 3 categories in this game, Easy, Moderate, Difficult. Each category contains 10 questions
+                        (30 total), wherein you have to answer the given questions. You can do so by pressing the
+                        letters one-by-one until you form the correct answer.</p>
+                    <p><b>POINTS:</b></p>
+                    <p>Each correct answer gives you 10 points. You can spend points to avail clues, which cost 25 points.
+                        You can choose whether you want a vowel clue or a consonant clue. But choose wisely because you
+                        only have 3 clues for the entire game.</p>
+                    <p><b>STRIKES:</b></p>
+                    <p>You are given three chances; if you make 3 wrong guesses, you lose the entire game! Choose wisely.
+                    </p>
+                    <p style="text-align: center;"><b>Good Luck!</b></p>
+                    <button id="closePopup"><b>Close</b></button>
+                </div>
+            </div>
+			<button id="playMusic"><b>Toggle Music</b></button>
+        </div>
+    </div>
+
+    <div class="title"></div> 
+
+    <audio id="buttonPress" src="buttonPress.mp3"></audio>
+	<audio id="backgroundMusic" src="backgroundMusic.mp3" autoplay loop preload="auto"></audio>
+	
+	<footer>Mendoza | Ranola | Sibucao | Marcos | De Francia</footer>
+
+    <script>
+		window.addEventListener("load", function () {
+			playBackgroundMusic();
+		});
+
+		myButton.addEventListener("click", function () {
+			myPopup.classList.add("show");
+			playButtonPressSound();
+		});
+		closePopup.addEventListener("click", function () {
+			myPopup.classList.remove("show");
+			playButtonPressSound();
+		});
+
+		function playButtonPressSound() {
+			let audio = document.getElementById("buttonPress");
+
+			audio.volume = 0.5;
+
+			if (audio) {
+				audio.play();
+			}
+		}
+
+		playMusic.addEventListener("click", function () {
+			toggleBackgroundMusic();
+			playButtonPressSound();
+		});
+
+		function toggleBackgroundMusic() {
+			let backgroundMusic = document.getElementById("backgroundMusic");
+
+			if (backgroundMusic.paused) {
+				backgroundMusic.play();
+			} else {
+				backgroundMusic.pause();
+			}
+		}
+
+		function playBackgroundMusic() {
+			let backgroundMusic = document.getElementById("backgroundMusic");
+
+			backgroundMusic.volume = 0.5;
+
+			if (backgroundMusic) {
+				backgroundMusic.play();
+			}
+		}
+	</script>
+</body>
+</html>
